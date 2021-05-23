@@ -10,6 +10,7 @@ public class JPAUtil {
 
     public static EntityManager getEntityManager() {
           if (emf == null) {
+        	  //persistence.xml
                emf = Persistence.createEntityManagerFactory("webservicejerseydb");
           }
           return emf.createEntityManager();
