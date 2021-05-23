@@ -147,6 +147,52 @@ public class ProdutoDAO {
 
 	       return true;
 	   }
+	   
+	   public List<Produto> getByPagination(int firstResult, int maxResults) {
+		   List<Produto> produtos;
+		   EntityManager em = JPAUtil.getEntityManager();
+
+		   try {
+		     produtos = em.createQuery("select p from Produto p", Produto.class)
+		       .setFirstResult(firstResult - 1)
+		       .setMaxResults(maxResults)
+		       .getResultList();
+		   } catch (RuntimeException ex) {
+		     throw new DAOException("Erro ao buscar produtos no banco de dados: " +
+		     ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+		   } finally {
+		     em.close();
+		   }
+
+		   if (produtos.isEmpty()) {
+		     throw new DAOException("Página com produtos vazia.",
+		     ErrorCode.NOT_FOUND.getCode());
+		   }
+
+		   return produtos;
+		 }
+	   
+	   public List<Produto> getByName(String name) {
+		   EntityManager em = JPAUtil.getEntityManager();
+		   List<Produto> produtos = null;
+
+		   try {
+		     produtos = em.createQuery("select p from Produto p where p.nome like :name", Produto.class)
+		     .setParameter("name", "%" + name + "%")
+		     .getResultList();
+		   } catch (RuntimeException ex) {
+		     throw new DAOException("Erro ao buscar produtos por nome no banco de dados: " + ex.getMessage(), ErrorCode.SERVER_ERROR.getCode());
+		   } finally {
+		     em.close();
+		   }
+
+		   if (produtos.isEmpty()) {
+		     throw new DAOException("A consulta não retornou elementos.",
+		     ErrorCode.NOT_FOUND.getCode());
+		   }
+
+		   return produtos;
+		 }
 
 	
 }
