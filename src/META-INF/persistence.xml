@@ -8,7 +8,7 @@
 
    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-   <class>br.com.devmedia.webservice.model.domain.Produto</class>
+   <class>br.com.ofsajoaquim.webservicejersey.model.domain.Produto</class>
 
    <properties>
          <property name="javax.persistence.jdbc.driver"
